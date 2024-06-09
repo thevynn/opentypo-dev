@@ -10,3 +10,5 @@
 - sass@1.77.4
 - shadcn-ui@0.8.0
 - next-auth@4.24.7
+- @supabase/supabase-js@2.43.4
+- @supabase/ssr@0.3.0
