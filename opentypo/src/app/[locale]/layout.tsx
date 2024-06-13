@@ -3,6 +3,8 @@ import "@/styles/globals.css";
 
 import localFont from "next/font/local";
 import SessionWrapper from "@/components/SessionWrapper";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 
 import GlobalNavigationBar from "@/components/GlobalNavigationBar";
 
@@ -18,18 +20,24 @@ export const metadata: Metadata = {
   description: "Free, but Better.",
 };
 
-export default function RootLayout({
+export default async function LocaleLayout({
   children,
-}: Readonly<{
+  params: { locale },
+}: {
   children: React.ReactNode;
-}>) {
+  params: { locale: string };
+}) {
+  const messages = await getMessages();
+
   return (
     <html lang="kr" className={`${pretendard.variable}`}>
       <SessionWrapper>
-        <body className={pretendard.className}>
-          <GlobalNavigationBar />
-          {children}
-        </body>
+        <NextIntlClientProvider messages={messages}>
+          <body className={pretendard.className}>
+            <GlobalNavigationBar />
+            {children}
+          </body>
+        </NextIntlClientProvider>
       </SessionWrapper>
     </html>
   );

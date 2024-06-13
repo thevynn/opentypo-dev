@@ -1,20 +1,20 @@
 import Link from "next/link";
 import BrandLogo from "@public/images/brandLogo.svg";
+import GlobalDropdownMenu from "@/components/GlobalDropdownMenu";
+import { CustomButton } from "@/components/ui/custom-button";
 
 export default function GlobalNavigationBar() {
   return (
-    <header className="flex h-16 w-full shrink-0 items-center px-4 md:px-6">
+    <header className="sticky top-0 w-screen flex h-16 shrink-0 items-center bg-white dark:bg-neutral-900 px-4 md:px-6 place-content-between">
       <Link href="#" className="mr-6 flex items-center" prefetch={false}>
-        <BrandLogo width={120} className="" />
+        <BrandLogo
+          color="primary dark:white"
+          style={{ width: 100, transform: `translateY(2px)` }}
+        />
       </Link>
-      <nav className="flex gap-6">
-        <Link
-          href="#"
-          className="text-sm font-medium hover:underline underline-offset-4"
-          prefetch={false}
-        >
-          폰트
-        </Link>
+      <nav className="flex gap-2">
+        <CustomButton variant={"circle"}>피드백 남기기</CustomButton>
+        <GlobalDropdownMenu />
       </nav>
     </header>
   );

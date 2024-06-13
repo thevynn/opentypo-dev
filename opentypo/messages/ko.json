@@ -1,0 +1,15 @@
+{
+  "Index": {
+    "title": "안녕, 세상아!"
+  },
+  "Interface": {
+    "login": "로그인",
+    "log-out": "로그아웃",
+    "profile": "내 프로필",
+    "bookmarks": "즐겨찾기",
+    "settings": "설정"
+  },
+  "FontSearchBar": {
+    "InputPlaceholder": "폰트 이름으로 검색해보세요"
+  }
+}

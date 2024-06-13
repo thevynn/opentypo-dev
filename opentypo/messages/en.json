@@ -1,0 +1,15 @@
+{
+  "Index": {
+    "title": "Hello, world!"
+  },
+  "Interface": {
+    "login": "Login",
+    "log-out": "Log-out",
+    "profile": "My profile",
+    "bookmarks": "Bookmarks",
+    "settings": "Settings"
+  },
+  "FontSearchBar": {
+    "InputPlaceholder": "Font name"
+  }
+}
