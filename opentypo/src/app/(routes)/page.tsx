@@ -11,7 +11,7 @@ export default function Home() {
     <main>
       {session ? (
         <>
-          <p>{JSON.stringify(session)}</p>
+          <pre>{JSON.stringify(session, null, 2)}</pre>
           <Button onClick={() => signOut()} variant="destructive">
             로그아웃
           </Button>
