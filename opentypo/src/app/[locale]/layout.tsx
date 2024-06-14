@@ -5,8 +5,7 @@ import localFont from "next/font/local";
 import SessionWrapper from "@/components/SessionWrapper";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-
-import GlobalNavigationBar from "@/components/GlobalNavigationBar";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const pretendard = localFont({
   src: "../../../public/fonts/PretendardVariable.woff2",
@@ -34,8 +33,13 @@ export default async function LocaleLayout({
       <SessionWrapper>
         <NextIntlClientProvider messages={messages}>
           <body className={pretendard.className}>
-            <GlobalNavigationBar />
-            {children}
+            <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+            >{children}
+            </ThemeProvider>
           </body>
         </NextIntlClientProvider>
       </SessionWrapper>
