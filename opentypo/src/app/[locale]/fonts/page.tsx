@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 
 import FontSearchBar from "@/components/FontSearchBar";
+import FontPreviewCard from "@/components/FontPreviewCard"
 
 // https://v0.dev/t/b3cxIEIZ6xm
 
@@ -15,6 +16,9 @@ export default async function Fonts() {
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Font Preview</h1>
           <FontSearchBar />
+        </div>
+        <div>
+          <FontPreviewCard/>
         </div>
       </div>
     </>

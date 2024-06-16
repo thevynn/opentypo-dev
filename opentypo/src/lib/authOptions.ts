@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth";
 
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import { SupabaseAdapter } from "@auth/supabase-adapter"
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -14,5 +15,6 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_DEV_SECRET as string,
     }),
   ],
-  debug: true,
+  secret: process.env.NEXTAUTH_SECRET,
+  debug: false,
 };

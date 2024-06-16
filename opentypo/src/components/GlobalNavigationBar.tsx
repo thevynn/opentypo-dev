@@ -1,7 +1,7 @@
 import Link from "next/link";
 import BrandLogo from "@public/images/brandLogo.svg";
 import GlobalDropdownMenu from "@/components/GlobalDropdownMenu";
-import { CustomButton } from "@/components/ui/custom-button";
+import { FeedbackDialog } from "@/components/FeedbackDialog";
 
 export default function GlobalNavigationBar() {
   return (
@@ -14,7 +14,7 @@ export default function GlobalNavigationBar() {
           />
         </Link>
         <nav className="flex gap-2">
-          <CustomButton variant={"circle"}>피드백 남기기</CustomButton>
+          <FeedbackDialog />
           <GlobalDropdownMenu />
         </nav>
       </div>

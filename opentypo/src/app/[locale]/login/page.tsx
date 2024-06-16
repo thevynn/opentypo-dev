@@ -1,14 +1,29 @@
 "use client";
 
-import { motion } from "framer-motion";
-
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import BrandLogo from "@public/images/brandLogo.svg";
 import Image from "next/image";
+
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react";
+
+import { Button } from "@/components/ui/button";
+
+import BrandLogo from "@public/images/brandLogo.svg";
 import GoogleLogo from "@public/images/googleLogo.svg";
 import GithubLogo from "@public/images/githubLogo.svg";
 import AppleLogo from "@public/images/appleLogo.svg";
+
+import { Instrument_Serif } from "next/font/google";
+
+const instrumentSerif = Instrument_Serif({
+  weight: "400",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+});
+
+export const cls = (...classnames: string[]) => {
+  return classnames.join(" ");
+};
 
 export default function Login() {
   return (
@@ -69,13 +84,22 @@ export default function Login() {
             <Link className="flex items-center gap-2 mt-1" href="/">
               <BrandLogo width={100} />
             </Link>
-            <h2 className="mt-6 text-4xl font-serif tracking-tight text-neutral-900 dark:text-neutral-50">
+            <h2
+              className={cls(
+                instrumentSerif.className,
+                "mt-6 text-4xl tracking-tight text-neutral-900 dark:text-neutral-50",
+              )}
+            >
               Sign in with your social account
             </h2>
           </div>
           <div className="space-y-5">
             <div className="space-y-3">
-              <Button className="w-full" variant="default">
+              <Button
+                onClick={() => signIn("google", { callbackUrl: "/" })}
+                className="w-full"
+                variant="default"
+              >
                 <GoogleLogo className="mr-2 h-5 w-5" />
                 Google 계정으로 로그인
               </Button>

@@ -6,6 +6,7 @@ import SessionWrapper from "@/components/SessionWrapper";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const pretendard = localFont({
   src: "../../../public/fonts/PretendardVariable.woff2",
@@ -40,6 +41,7 @@ export default async function LocaleLayout({
             disableTransitionOnChange
             >{children}
             </ThemeProvider>
+            <Toaster />
           </body>
         </NextIntlClientProvider>
       </SessionWrapper>

@@ -1,10 +1,21 @@
 "use client";
 
+import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { signOut, useSession } from "next-auth/react";
 
 import { useTranslations } from "next-intl";
-import { Menu, LogIn, User, Bookmark, Settings, LogOut } from "lucide-react";
+import {
+  Menu,
+  LogIn,
+  User,
+  Bookmark,
+  Settings,
+  LogOut,
+  FileType2,
+  CircleHelp,
+  Book,
+} from "lucide-react";
 import { CustomButton } from "@/components/ui/custom-button";
 import {
   DropdownMenu,
@@ -23,32 +34,64 @@ export default function HamburgerMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <CustomButton variant="circle" size="icon">
-          <Menu className="h-4 w-4" />
+        <CustomButton
+          variant="circle"
+          size="icon"
+          style={{
+            backgroundImage: session?.user?.image
+              ? `url(${session.user.image})`
+              : "none",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          {!session?.user?.image && <Menu className="h-4 w-4" />}
         </CustomButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40">
         {session ? (
           <></>
         ) : (
-          <DropdownMenuItem onClick={() => signIn("google")}>
-            <LogIn className="mr-2 h-4 w-4" />
-            <span className="font-medium">{t("login")}</span>
-          </DropdownMenuItem>
+          <Link href="/login" passHref>
+            <DropdownMenuItem>
+              <LogIn className="mr-2 h-4 w-4" />
+              <span className="font-medium">{t("login")}</span>
+            </DropdownMenuItem>
+          </Link>
         )}
         {session ? <></> : <DropdownMenuSeparator />}
         <DropdownMenuItem>
-          <User className="mr-2 h-4 w-4" />
-          <span className="font-medium">{t("profile")}</span>
+          <FileType2 className="mr-2 h-4 w-4" />
+          <span className="font-medium">폰트 찾아보기</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <Book className="mr-2 h-4 w-4" />
+          <span className="font-medium">서비스 소개</span>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Bookmark className="mr-2 h-4 w-4" />
-          <span className="font-medium">{t("bookmarks")}</span>
+          <CircleHelp className="mr-2 h-4 w-4" />
+          <span className="font-medium">FAQ</span>
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        {session ? (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <User className="mr-2 h-4 w-4" />
+              <span className="font-medium">{t("profile")}</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Bookmark className="mr-2 h-4 w-4" />
+              <span className="font-medium">{t("bookmarks")}</span>
+            </DropdownMenuItem>
+          </>
+        ) : (
+          <></>
+        )}
+        {/* <DropdownMenuItem>
           <Settings className="mr-2 h-4 w-4" />
           <span className="font-medium">{t("settings")}</span>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
         {session ? <DropdownMenuSeparator /> : <></>}
         {session ? (
           <DropdownMenuItem onClick={() => signOut()}>
