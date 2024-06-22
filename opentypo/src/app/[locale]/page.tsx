@@ -12,7 +12,7 @@ export default function Home() {
 
   return (
     <>
-      <GlobalNavigationBar />
+      
       <main className="w-screen flex justify-center px-4 md:px-6">
         <div className="w-full max-w-6xl">
           <Landing />

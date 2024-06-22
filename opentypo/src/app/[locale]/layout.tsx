@@ -6,7 +6,10 @@ import SessionWrapper from "@/components/SessionWrapper";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/components/theme-provider";
+import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/toaster";
+
+import GlobalNavigationBar from "@/components/GlobalNavigationBar";
 
 const pretendard = localFont({
   src: "../../../public/fonts/PretendardVariable.woff2",
@@ -35,11 +38,23 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <body className={pretendard.className}>
             <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-            >{children}
+              attribute="class"
+              defaultTheme="light"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <NextTopLoader
+                color="#ff2f00"
+                initialPosition={0.08}
+                crawlSpeed={200}
+                height={2}
+                crawl={true}
+                showSpinner={false}
+                easing="ease"
+                speed={200}
+              />
+              <GlobalNavigationBar />
+              {children}
             </ThemeProvider>
             <Toaster />
           </body>

@@ -60,10 +60,12 @@ export default function HamburgerMenu() {
           </Link>
         )}
         {session ? <></> : <DropdownMenuSeparator />}
-        <DropdownMenuItem>
-          <FileType2 className="mr-2 h-4 w-4" />
-          <span className="font-medium">폰트 찾아보기</span>
-        </DropdownMenuItem>
+        <Link href="/fonts" passHref>
+          <DropdownMenuItem>
+            <FileType2 className="mr-2 h-4 w-4" />
+            <span className="font-medium">폰트 찾아보기</span>
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <Book className="mr-2 h-4 w-4" />
