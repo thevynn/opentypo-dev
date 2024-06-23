@@ -22,6 +22,7 @@ const config = {
         pretendard: ["var(--font-pretendard)"],
       },
       colors: {
+        brandColor: "#ff2f00",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

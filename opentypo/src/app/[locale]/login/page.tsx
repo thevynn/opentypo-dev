@@ -1,3 +1,5 @@
+// TODO: 로그인 페이지에서 GNB가 안보이게 하도록
+
 "use client";
 
 import Image from "next/image";

@@ -5,6 +5,7 @@ import { signOut, useSession } from "next-auth/react";
 import SignInButton from "@/components/SignInButton";
 import { Button } from "@/components/ui/button";
 import Landing from "@/components/Landing";
+import ExploreSection from "@/components/ExploreSection";
 import GlobalNavigationBar from "@/components/GlobalNavigationBar";
 
 export default function Home() {
@@ -12,10 +13,10 @@ export default function Home() {
 
   return (
     <>
-      
-      <main className="w-screen flex justify-center px-4 md:px-6">
-        <div className="w-full max-w-6xl">
+      <main className="w-screen flex justify-center px-12">
+        <div className="w-full">
           <Landing />
+          <ExploreSection />
         </div>
       </main>
     </>

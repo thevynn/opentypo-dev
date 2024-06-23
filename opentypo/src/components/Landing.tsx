@@ -1,5 +1,6 @@
 import { Instrument_Serif } from "next/font/google";
 import ShimmerButton from "@/components/ui/shimmer-button";
+import { Badge } from "@/components/ui/badge";
 import { ChevronRight } from "lucide-react";
 
 const instrumentSerif = Instrument_Serif({
@@ -14,8 +15,8 @@ export const cls = (...classnames: string[]) => {
 
 export default function Landing() {
   return (
-    <div className="p-8 flex flex-col gap-6 items-center">
-      <div className="w-full flex flex-col gap-1">
+    <div className="p-16 flex flex-col gap-6 items-center">
+      <div className="w-full flex flex-col gap-2">
         {/* Hero Effector */}
         <svg width="0" height="0">
           <filter id="turbulence">
@@ -35,10 +36,13 @@ export default function Landing() {
             <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="5" />
           </filter>
         </svg>
+        <Badge className="self-center" size="md" variant="outline">
+          매주 새로운 무료 폰트
+        </Badge>
         <h1
           className={cls(
             instrumentSerif.className,
-            "text-8xl text-center tracking-tight"
+            "text-9xl text-center tracking-tight",
           )}
           style={{ filter: "url(#turbulence)" }}
         >
@@ -47,7 +51,7 @@ export default function Landing() {
             Better.
           </span>
         </h1>
-        <h3 className="text-md font-regular text-center text-neutral-800 dark:text-neutral-400">
+        <h3 className="text-lg font-semibold text-center text-neutral-700 dark:text-neutral-400">
           무료지만 퀄리티가 보장된, 감도높은 폰트들을 큐레이팅 해드립니다.
         </h3>
       </div>
