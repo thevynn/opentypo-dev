@@ -23,7 +23,7 @@ const instrumentSerif = Instrument_Serif({
   style: ["normal", "italic"],
 });
 
-const cls = (...classnames: string[]) => {
+export const cls = (...classnames: string[]) => {
   return classnames.join(" ");
 };
 
