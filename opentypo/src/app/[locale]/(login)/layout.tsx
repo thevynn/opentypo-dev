@@ -8,11 +8,12 @@ import { getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/components/theme-provider";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/toaster";
+import Footer from "@/components/Footer";
 
 import GlobalNavigationBar from "@/components/GlobalNavigationBar";
 
 const pretendard = localFont({
-  src: "../../../public/fonts/PretendardVariable.woff2",
+  src: "../../../../public/fonts/PretendardVariable.woff2",
   display: "swap",
   weight: "45 920",
   variable: "--font-pretendard",
@@ -53,7 +54,6 @@ export default async function LocaleLayout({
                 easing="ease"
                 speed={200}
               />
-              <GlobalNavigationBar />
               {children}
             </ThemeProvider>
             <Toaster />

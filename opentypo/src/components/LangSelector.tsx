@@ -10,21 +10,16 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { RotateCcw, ChevronsUpDown, Palette } from "lucide-react";
+import { RotateCcw, ChevronsUpDown, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 const fontTypes = [
   { label: "전체" },
-  { label: "Sans" },
-  { label: "Serif" },
-  { label: "Mono" },
-  { label: "Display" },
-  { label: "Script" },
-  { label: "Handwriting" },
-  { label: "Decorative" },
-  { label: "Experimental" },
+  { label: "한국어" },
+  { label: "영어" },
+  { label: "일본어" },
 ];
 
 // Action types
@@ -36,7 +31,7 @@ type State = {
   [key: string]: boolean;
 };
 
-// Reducer function
+// Reducer function (줄 번호: 19 - 31)
 function reducer(
   state: State,
   action: { type: string; option?: string; value?: boolean },
@@ -57,10 +52,10 @@ function reducer(
   }
 }
 
-export default function VibeSelector() {
+export default function LangSelector() {
   // Initial state based on fontTypes
   const initialState: State = fontTypes.reduce((acc, fontType) => {
-    acc[`show${fontType.label}`] = true; // 초기값을 true로 설정합니다.
+    acc[`show${fontType.label}`] = true;
     return acc;
   }, {} as State);
 
@@ -87,9 +82,9 @@ export default function VibeSelector() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" className="flex items-center space-x-1">
-          <Palette className="h-4 w-4" />
-          <p className="font-semibold text-neutral-900">느낌</p>
-          <p className="font-medium text-neutral-700">
+          <Languages className="h-4 w-4" />
+          <p className="font-semibold text-neutral-900">언어</p>
+          <p className="font-medium text-neutral-600">
             {selectedItemsText}
             {moreItemsCount > 0 &&
               selectedItems.length !== fontTypes.length && (
@@ -104,7 +99,7 @@ export default function VibeSelector() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="start">
-        <DropdownMenuLabel>느낌 선택</DropdownMenuLabel>
+        <DropdownMenuLabel>언어 선택</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {fontTypes.map((fontType) => (
           <DropdownMenuCheckboxItem

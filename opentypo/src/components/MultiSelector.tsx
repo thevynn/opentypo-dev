@@ -10,33 +10,29 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { RotateCcw, ChevronsUpDown, Palette } from "lucide-react";
+import { RotateCcw, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
-const fontTypes = [
-  { label: "전체" },
-  { label: "Sans" },
-  { label: "Serif" },
-  { label: "Mono" },
-  { label: "Display" },
-  { label: "Script" },
-  { label: "Handwriting" },
-  { label: "Decorative" },
-  { label: "Experimental" },
-];
+type Item = {
+  label: string;
+};
 
-// Action types
+type MultiSelectorProps = {
+  items: Item[];
+  label: string;
+  icon: React.ReactNode;
+  onSelectionChange: (selectedItems: string[]) => void;
+};
+
 const TOGGLE_OPTION = "TOGGLE_OPTION";
 const RESET_OPTIONS = "RESET_OPTIONS";
 
-// State type
 type State = {
   [key: string]: boolean;
 };
 
-// Reducer function
 function reducer(
   state: State,
   action: { type: string; option?: string; value?: boolean },
@@ -49,7 +45,7 @@ function reducer(
       };
     case RESET_OPTIONS:
       return Object.keys(state).reduce((acc, key) => {
-        acc[key] = true; // 모든 값을 true로 설정하여 초기화합니다.
+        acc[key] = true;
         return acc;
       }, {} as State);
     default:
@@ -57,21 +53,27 @@ function reducer(
   }
 }
 
-export default function VibeSelector() {
-  // Initial state based on fontTypes
-  const initialState: State = fontTypes.reduce((acc, fontType) => {
-    acc[`show${fontType.label}`] = true; // 초기값을 true로 설정합니다.
+
+
+export default function MultiSelector({
+  items,
+  label,
+  icon,
+  onSelectionChange,
+}: MultiSelectorProps) {
+  const initialState: State = items.reduce((acc, item) => {
+    acc[`show${item.label}`] = true;
     return acc;
   }, {} as State);
 
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const selectedItems = fontTypes
-    .filter((fontType) => state[`show${fontType.label}`])
-    .map((fontType) => fontType.label);
+  const selectedItems = items
+    .filter((item) => state[`show${item.label}`])
+    .map((item) => item.label);
 
   const selectedItemsText =
-    selectedItems.length === fontTypes.length
+    selectedItems.length === items.length
       ? "전체"
       : selectedItems.length > 2
         ? `${selectedItems.slice(0, 2).join(", ")}`
@@ -83,43 +85,59 @@ export default function VibeSelector() {
     dispatch({ type: RESET_OPTIONS });
   };
 
+  React.useEffect(() => {
+    const selected = items
+      .filter((item) => state[`show${item.label}`])
+      .map((item) => item.label);
+    onSelectionChange(selected);
+  }, [state, items, onSelectionChange]);
+
+  React.useEffect(() => {
+  console.log(`MultiSelector (${label}) - Selected items:`, selectedItems);
+  const selected = items
+    .filter((item) => state[`show${item.label}`])
+    .map((item) => item.label);
+  console.log(`MultiSelector (${label}) - Emitting selection:`, selected);
+  onSelectionChange(selected);
+}, [state, items, onSelectionChange, label]);
+  
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" className="flex items-center space-x-1">
-          <Palette className="h-4 w-4" />
-          <p className="font-semibold text-neutral-900">느낌</p>
-          <p className="font-medium text-neutral-700">
+          {icon}
+          <p className="font-semibold text-neutral-900">{label}</p>
+          <p className="font-semibold text-neutral-500">
             {selectedItemsText}
-            {moreItemsCount > 0 &&
-              selectedItems.length !== fontTypes.length && (
-                <span className="text-neutral-500">
-                  {" +"}
-                  {moreItemsCount}
-                  {" more"}
-                </span>
-              )}
+            {moreItemsCount > 0 && selectedItems.length !== items.length && (
+              <span className="text-neutral-400">
+                {" +"}
+                {moreItemsCount}
+                {" more"}
+              </span>
+            )}
           </p>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="start">
-        <DropdownMenuLabel>느낌 선택</DropdownMenuLabel>
+        <DropdownMenuLabel>{label} 선택</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {fontTypes.map((fontType) => (
+        {items.map((item) => (
           <DropdownMenuCheckboxItem
-            key={fontType.label}
-            checked={state[`show${fontType.label}`]}
+            key={item.label}
+            checked={state[`show${item.label}`]}
             keepOpenOnSelect={true}
             onCheckedChange={(checked) =>
               dispatch({
                 type: TOGGLE_OPTION,
-                option: `show${fontType.label}`,
+                option: `show${item.label}`,
                 value: checked,
               })
             }
           >
-            {fontType.label}
+            {item.label}
           </DropdownMenuCheckboxItem>
         ))}
         <DropdownMenuSeparator />

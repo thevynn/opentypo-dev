@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { RotateCcw, ChevronsUpDown } from "lucide-react";
+import { RotateCcw, ChevronsUpDown, Ligature } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -28,7 +28,6 @@ import { useMediaQuery } from "@/hooks/use-media-query"; // Import the useMediaQ
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 const fontTypes = [
-  { label: "전체" },
   { label: "Sans" },
   { label: "Serif" },
   { label: "Mono" },
@@ -61,7 +60,7 @@ function reducer(
       };
     case RESET_OPTIONS:
       return Object.keys(state).reduce((acc, key) => {
-        acc[key] = false;
+        acc[key] = true; // 모든 값을 true로 설정하여 초기화합니다.
         return acc;
       }, {} as State);
     default:
@@ -75,7 +74,7 @@ export default function CategorySelector() {
 
   // Initial state based on fontTypes
   const initialState: State = fontTypes.reduce((acc, fontType) => {
-    acc[`show${fontType.label}`] = false;
+    acc[`show${fontType.label}`] = true; // 초기값을 true로 설정합니다.
     return acc;
   }, {} as State);
 
@@ -86,9 +85,11 @@ export default function CategorySelector() {
     .map((fontType) => fontType.label);
 
   const selectedItemsText =
-    selectedItems.length > 2
-      ? `${selectedItems.slice(0, 2).join(", ")}`
-      : selectedItems.join(", ");
+    selectedItems.length === fontTypes.length
+      ? "전체"
+      : selectedItems.length > 2
+        ? `${selectedItems.slice(0, 2).join(", ")}`
+        : selectedItems.join(", ");
 
   const moreItemsCount = selectedItems.length - 2;
 
@@ -101,16 +102,18 @@ export default function CategorySelector() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="secondary" className="flex items-center space-x-1">
+            <Ligature className="w-4 h-4" />
             <p className="font-semibold text-neutral-900">카테고리</p>
             <p className="font-medium text-neutral-700">
               {selectedItemsText}
-              {moreItemsCount > 0 && (
-                <span className="text-neutral-500">
-                  {" +"}
-                  {moreItemsCount}
-                  {" more"}
-                </span>
-              )}
+              {moreItemsCount > 0 &&
+                selectedItems.length !== fontTypes.length && (
+                  <span className="text-neutral-500">
+                    {" +"}
+                    {moreItemsCount}
+                    {" more"}
+                  </span>
+                )}
             </p>
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -122,6 +125,7 @@ export default function CategorySelector() {
             <DropdownMenuCheckboxItem
               key={fontType.label}
               checked={state[`show${fontType.label}`]}
+              keepOpenOnSelect={true}
               onCheckedChange={(checked) =>
                 dispatch({
                   type: TOGGLE_OPTION,
@@ -154,16 +158,18 @@ export default function CategorySelector() {
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button variant="secondary" className="flex items-center space-x-1">
+          <Ligature className="w-4 h-4" />
           <p className="font-semibold text-neutral-900">카테고리</p>
           <p className="font-medium text-neutral-700">
             {selectedItemsText}
-            {moreItemsCount > 0 && (
-              <span className="text-neutral-500">
-                {" +"}
-                {moreItemsCount}
-                {" more"}
-              </span>
-            )}
+            {moreItemsCount > 0 &&
+              selectedItems.length !== fontTypes.length && (
+                <span className="text-neutral-500">
+                  {" +"}
+                  {moreItemsCount}
+                  {" more"}
+                </span>
+              )}
           </p>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -178,6 +184,7 @@ export default function CategorySelector() {
             <DrawerCheckboxItem
               key={fontType.label}
               checked={state[`show${fontType.label}`]}
+              keepOpenOnSelect={true}
               onCheckedChange={(checked) =>
                 dispatch({
                   type: TOGGLE_OPTION,
