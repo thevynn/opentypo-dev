@@ -4,6 +4,17 @@ import { Languages, Palette, Tag } from "lucide-react";
 import MultiSelector from "./MultiSelector";
 import FontSearchBar from "@/components/FontSearchBar";
 import FontPreviewCard from "@/components/FontPreviewCard";
+import { Instrument_Serif } from "next/font/google";
+
+const instrumentSerif = Instrument_Serif({
+  weight: "400",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+});
+
+export const cls = (...classnames: string[]) => {
+  return classnames.join(" ");
+};
 
 interface ExploreSectionProps {
   categoryOptions: { id: number; label: string }[];
@@ -118,10 +129,23 @@ export default function ExploreSection({
               name={font.name}
               authors={font.author}
               fontUrl={font.fontUrl}
+              downloadUrl={font.download_url} // downloadUrl을 전달
             />
           ))
         ) : (
-          <p>No fonts found.</p>
+          <div className="w-full p-12 rounded-xl bg-neutral-100 flex flex-col justify-center">
+            <h1
+              className={cls(
+                instrumentSerif.className,
+                "text-neutral-400 text-4xl text-center tracking-tight",
+              )}
+            >
+              Not Found
+            </h1>
+            <p className="text-neutral-400 text-md font-medium text-center">
+              해당하는 폰트가 없어요 :(
+            </p>
+          </div>
         )}
       </div>
     </div>
