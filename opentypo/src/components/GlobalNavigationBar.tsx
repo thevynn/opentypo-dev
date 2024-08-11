@@ -26,8 +26,10 @@ export default function GlobalNavigationBar() {
 
   return (
     <header
-      className={`sticky top-0 w-screen flex shrink-0 items-center justify-items-center justify-center transition-all duration-300 bg-white dark:bg-neutral-900 py-4 px-12 ${
-        isScrolled ? "z-50 bg-neutral-200/50 backdrop-blur-2xl" : ""
+      className={`z-50 border-b sticky top-0 w-screen flex shrink-0 items-center justify-items-center justify-center transition-all duration-300 bg-white dark:bg-neutral-900 py-4 px-4 lg:px-12 ${
+        isScrolled
+          ? "border-neutral-200 bg-white"
+          : "border-transparent"
       }`}
     >
       <div className="w-full max-w-screen-xl flex shrink-0 items-center place-content-between">

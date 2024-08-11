@@ -23,7 +23,7 @@ export default function FontSearchBar({ onSearch }: FontSearchBarProps) {
       placeholder={t("InputPlaceholder")}
       value={searchTerm}
       onChange={handleSearch}
-      className="w-64"
+      className="w-full lg:w-64"
     />
   );
 }

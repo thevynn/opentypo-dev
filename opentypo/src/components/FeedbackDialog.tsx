@@ -30,7 +30,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CustomButton } from "@/components/ui/custom-button";
-import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
+import { Textarea } from "@/components/ui/textarea";
 
 import { supabase } from "@/lib/supabaseClient";
 import { Laugh, Smile, Meh, Frown, Angry } from "lucide-react";
@@ -50,11 +50,11 @@ export function FeedbackDialog() {
       rating,
     };
 
-    if (session) {
-      feedbackData.user_id = session.user.id;
-      feedbackData.user_name = session.user.name;
-      feedbackData.email_address = session.user.email;
-    }
+    // if (session) {
+    //   feedbackData.user_id = session.user.id;
+    //   feedbackData.user_name = session.user.name;
+    //   feedbackData.email_address = session.user.email;
+    // }
 
     const { data, error } = await supabase
       .from("feedbacks")
@@ -112,10 +112,8 @@ export function FeedbackDialog() {
           <Angry className="h-4 w-4" />
         </ToggleGroupItem>
       </ToggleGroup>
-      <AutosizeTextarea
+      <Textarea
         placeholder="이런 기능이 있으면 좋겠어요"
-        minHeight={120}
-        maxHeight={600}
         value={feedback}
         onChange={(e) => setFeedback(e.target.value)}
       />
@@ -158,7 +156,7 @@ export function FeedbackDialog() {
             OpenTypo™는 여러분들과 함께 만들어나가는 프로젝트입니다.
           </DrawerDescription>
         </DrawerHeader>
-        <DrawerFooter className="pt-2">
+        <DrawerFooter className="pt-2 gap-4">
           {feedbackForm}
           <Button type="submit" size="default" onClick={handleSubmit}>
             보내기

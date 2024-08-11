@@ -15,7 +15,7 @@ export const cls = (...classnames: string[]) => {
 
 export default function Landing() {
   return (
-    <div className="p-16 flex flex-col gap-6 items-center">
+    <div className="px-2 py-16  flex flex-col gap-6 items-center">
       <div className="w-full flex flex-col gap-2">
         {/* Hero Effector */}
         <svg width="0" height="0">
@@ -42,7 +42,7 @@ export default function Landing() {
         <h1
           className={cls(
             instrumentSerif.className,
-            "text-9xl text-center tracking-tight",
+            "text-7xl lg:text-9xl text-center tracking-tight",
           )}
           style={{ filter: "url(#turbulence)" }}
         >

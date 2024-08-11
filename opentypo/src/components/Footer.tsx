@@ -34,20 +34,15 @@ export default function Footer() {
               style={{ width: 120, transform: `translateY(2px)` }}
             />
           </Link>
-          <p className="text-muted-foreground text-sm">
-            Free, but Better.
-          </p>
+          <p className="text-muted-foreground text-sm">Free, but Better.</p>
         </div>
         <div className="flex flex-col gap-2">
           <h4 className="text-base font-semibold">프로덕트</h4>
           <nav className="flex flex-col gap-1">
-            <Link href="#" className="text-sm hover:underline" prefetch={false}>
-              폰트 찾아보기
-            </Link>
-            <Link href="#" className="text-sm hover:underline" prefetch={false}>
+            <Link href="/about" className="text-sm hover:underline" prefetch={false}>
               서비스 소개
             </Link>
-            <Link href="#" className="text-sm hover:underline" prefetch={false}>
+            <Link href="#" className="text-sm text-neutral-400" prefetch={false}>
               FAQ
             </Link>
           </nav>
@@ -55,13 +50,17 @@ export default function Footer() {
         <div className="flex flex-col gap-2">
           <h4 className="text-base font-semibold">지원</h4>
           <nav className="flex flex-col gap-1">
-            <Link href="#" className="text-sm hover:underline" prefetch={false}>
+            <Link href="/about" className="text-sm hover:underline" prefetch={false}>
               폰트 제보하기
             </Link>
-            <Link href="#" className="text-sm hover:underline" prefetch={false}>
+            <Link href="/about" className="text-sm hover:underline" prefetch={false}>
               광고 문의
             </Link>
-            <Link href="#" className="text-sm hover:underline" prefetch={false}>
+            <Link
+              href="#"
+              className="text-sm text-neutral-400"
+              prefetch={false}
+            >
               라이센스
             </Link>
           </nav>
@@ -75,7 +74,7 @@ export default function Footer() {
       </div>
       <div className="container mx-auto max-w-7xl px-4 md:px-6 mt-8 text-center">
         <p className="text-sm text-muted-foreground">
-          &copy; 2024 Design eXperience™. All rights reserved.
+          &copy; 2024 Design eXperience™
         </p>
       </div>
     </footer>

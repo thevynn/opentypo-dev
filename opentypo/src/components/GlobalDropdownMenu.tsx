@@ -49,29 +49,13 @@ export default function HamburgerMenu() {
         </CustomButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40">
-        {session ? (
-          <></>
-        ) : (
-          <Link href="/login" passHref>
-            <DropdownMenuItem>
-              <LogIn className="mr-2 h-4 w-4" />
-              <span className="font-medium">{t("login")}</span>
-            </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/about" prefetch={false}>
+            <Book className="mr-2 h-4 w-4" />
+            <span className="font-medium">서비스 소개</span>
           </Link>
-        )}
-        {session ? <></> : <DropdownMenuSeparator />}
-        <Link href="/fonts" passHref>
-          <DropdownMenuItem>
-            <FileType2 className="mr-2 h-4 w-4" />
-            <span className="font-medium">폰트 찾아보기</span>
-          </DropdownMenuItem>
-        </Link>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Book className="mr-2 h-4 w-4" />
-          <span className="font-medium">서비스 소개</span>
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem disabled>
           <CircleHelp className="mr-2 h-4 w-4" />
           <span className="font-medium">FAQ</span>
         </DropdownMenuItem>

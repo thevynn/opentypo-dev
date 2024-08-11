@@ -54,7 +54,7 @@ export default function FontPreviewCard({
 
   const authorElements = authors.map((author, index) => (
     <span key={index}>
-      <a href={author.link} target="_blank" rel="noopener noreferrer">
+      <a className="hover:underline" href={author.link} target="_blank" rel="noopener noreferrer">
         {author.name}
       </a>
       {index < authors.length - 1 ? ", " : ""}
@@ -83,9 +83,6 @@ export default function FontPreviewCard({
       <CardFooter className="bg-white py-4 flex flex-row justify-between">
         <p className="text-sm">Designed by {authorElements}</p>
         <div className="flex flex-row gap-2">
-          <Button variant="ghost" className="rounded-full">
-            <Bookmark className="h-4 w-4" />
-          </Button>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
