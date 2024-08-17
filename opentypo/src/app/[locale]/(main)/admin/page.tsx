@@ -1,8 +1,6 @@
-// TODO: Personality 입력 구현
-
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { supabaseClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,10 +22,30 @@ export default function Admin() {
     category_id: "",
     language_id: "",
     license: "",
-    download_url: "",
+    download_url: "", // download_url 필드 추가
   });
 
+  const [selectedPersonalities, setSelectedPersonalities] = useState<
+    { id: string; name: string }[]
+  >([]);
+
   const [fontFile, setFontFile] = useState<File | null>(null);
+  const [availablePersonalities, setAvailablePersonalities] = useState<
+    { id: string; name: string }[]
+  >([]);
+
+  useEffect(() => {
+    const fetchPersonalities = async () => {
+      const { data, error } = await supabaseClient
+        .from("personality")
+        .select("id, name");
+
+      if (!error && data) {
+        setAvailablePersonalities(data);
+      }
+    };
+    fetchPersonalities();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -62,6 +80,24 @@ export default function Admin() {
     setFontFile(file || null);
   };
 
+  const addPersonality = (selectedId: string) => {
+    const selectedPersonality = availablePersonalities.find(
+      (p) => p.id === selectedId,
+    );
+    if (
+      selectedPersonality &&
+      !selectedPersonalities.find((p) => p.id === selectedPersonality.id)
+    ) {
+      setSelectedPersonalities((prev) => [...prev, selectedPersonality]);
+    }
+  };
+
+  const removePersonality = (id: string) => {
+    setSelectedPersonalities((prev) =>
+      prev.filter((personality) => personality.id !== id),
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -87,13 +123,26 @@ export default function Admin() {
         throw new Error(uploadError.message);
       }
 
-      // 업로드 후 폰트 정보를 데이터베이스에 저장
-      const { error } = await supabaseClient
+      // 폰트 정보를 데이터베이스에 저장
+      const { data, error: fontInsertError } = await supabaseClient
         .from("fonts")
-        .insert([{ ...formData, font_file_path: filePath }]);
+        .insert([{ ...formData, font_file_path: filePath }])
+        .select();
 
-      if (error) {
-        throw new Error(error.message);
+      if (fontInsertError || !data || data.length === 0) {
+        throw new Error(fontInsertError?.message || "Font insert failed.");
+      }
+
+      const insertedFontId = data[0].id;
+
+      // font_personality 테이블에 데이터 저장
+      for (const personality of selectedPersonalities) {
+        await supabaseClient.from("font_personality").insert([
+          {
+            font_id: insertedFontId,
+            personality_id: personality.id,
+          },
+        ]);
       }
 
       toast({
@@ -106,8 +155,9 @@ export default function Admin() {
         category_id: "",
         language_id: "",
         license: "",
-        download_url: "",
+        download_url: "", // download_url 초기화
       });
+      setSelectedPersonalities([]);
       setFontFile(null);
     } catch (error) {
       toast({
@@ -240,6 +290,43 @@ export default function Admin() {
             onChange={handleChange}
             required
           />
+        </div>
+
+        <div>
+          <Label htmlFor="personality">Add Personality</Label>
+          <Select onValueChange={addPersonality}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select a personality" />
+            </SelectTrigger>
+            <SelectContent>
+              {availablePersonalities.map((personality) => (
+                <SelectItem key={personality.id} value={personality.id}>
+                  {personality.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="mt-4">
+          <Label>Selected Personalities</Label>
+          <ul>
+            {selectedPersonalities.map((personality) => (
+              <li
+                key={personality.id}
+                className="flex items-center justify-between"
+              >
+                {personality.name}
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => removePersonality(personality.id)}
+                >
+                  Remove
+                </Button>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <Button type="submit">Submit</Button>
