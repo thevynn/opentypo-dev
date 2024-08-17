@@ -39,6 +39,7 @@
     "nextjs-toploader": "^1.6.12",
     "react": "^18",
     "react-dom": "^18",
+    "react-infinite-scroll-component": "^6.1.0",
     "sass": "^1.77.4",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",

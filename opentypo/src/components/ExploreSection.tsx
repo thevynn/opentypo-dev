@@ -4,6 +4,7 @@ import { Languages, Palette, Tag } from "lucide-react";
 import MultiSelector from "./MultiSelector";
 import FontSearchBar from "@/components/FontSearchBar";
 import FontPreviewCard from "@/components/FontPreviewCard";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { Instrument_Serif } from "next/font/google";
 
 const instrumentSerif = Instrument_Serif({
@@ -40,17 +41,11 @@ export default function ExploreSection({
   >([]);
   const [searchTerm, setSearchTerm] = React.useState("");
   const [filteredFonts, setFilteredFonts] = React.useState(fonts);
+  const [items, setItems] = React.useState(filteredFonts.slice(0, 10));
+  const [hasMore, setHasMore] = React.useState(filteredFonts.length > 10);
 
   React.useEffect(() => {
-    console.log("Filtering fonts...");
-    console.log("Selected Languages:", selectedLanguages);
-    console.log("Selected Categories:", selectedCategories);
-    console.log("Selected Personalities:", selectedPersonalities);
-    console.log("Search Term:", searchTerm);
-
     const newFilteredFonts = fonts.filter((font) => {
-      console.log(`Font: ${font.name}, Language: ${font.language}`);
-
       const matchesLanguage =
         selectedLanguages.length === 0 ||
         selectedLanguages.includes(font.language);
@@ -72,13 +67,6 @@ export default function ExploreSection({
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
 
-      console.log(`Font: ${font.name}, Matches Language: ${matchesLanguage}`);
-      console.log(`Font: ${font.name}, Matches Category: ${matchesCategory}`);
-      console.log(
-        `Font: ${font.name}, Matches Personality: ${matchesPersonality}`,
-      );
-      console.log(`Font: ${font.name}, Matches Search: ${matchesSearch}`);
-
       return (
         matchesLanguage &&
         matchesCategory &&
@@ -87,8 +75,9 @@ export default function ExploreSection({
       );
     });
 
-    console.log("New Filtered Fonts:", newFilteredFonts);
     setFilteredFonts(newFilteredFonts);
+    setItems(newFilteredFonts.slice(0, 10));
+    setHasMore(newFilteredFonts.length > 10);
   }, [
     selectedLanguages,
     selectedCategories,
@@ -97,6 +86,17 @@ export default function ExploreSection({
     fonts,
     categoryOptions,
   ]);
+
+  const fetchMoreData = () => {
+    if (items.length >= filteredFonts.length) {
+      setHasMore(false);
+      return;
+    }
+
+    setTimeout(() => {
+      setItems(filteredFonts.slice(0, items.length + 10));
+    }, 500);
+  };
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -121,33 +121,45 @@ export default function ExploreSection({
         />
         <FontSearchBar onSearch={setSearchTerm} />
       </div>
-      <div className="flex flex-col gap-4">
-        {filteredFonts.length > 0 ? (
-          filteredFonts.map((font) => (
-            <FontPreviewCard
-              key={font.id}
-              name={font.name}
-              authors={font.author}
-              fontUrl={font.fontUrl}
-              downloadUrl={font.download_url} // downloadUrl을 전달
-            />
-          ))
-        ) : (
-          <div className="w-full p-12 rounded-xl bg-neutral-100 flex flex-col justify-center">
-            <h1
-              className={cls(
-                instrumentSerif.className,
-                "text-neutral-400 text-4xl text-center tracking-tight",
-              )}
-            >
-              Not Found
-            </h1>
-            <p className="text-neutral-400 text-md font-medium text-center">
-              해당하는 폰트가 없어요 :(
-            </p>
-          </div>
-        )}
-      </div>
+      <InfiniteScroll
+        dataLength={items.length}
+        next={fetchMoreData}
+        hasMore={hasMore}
+        loader={<h4>Loading...</h4>}
+        // endMessage={
+        //   <p style={{ textAlign: "center" }}>
+        //     <b>End of Items</b>
+        //   </p>
+        // }
+      >
+        <div className="flex flex-col gap-4">
+          {items.length > 0 ? (
+            items.map((font) => (
+              <FontPreviewCard
+                key={font.id}
+                name={font.name}
+                authors={font.author}
+                fontUrl={font.fontUrl}
+                downloadUrl={font.download_url}
+              />
+            ))
+          ) : (
+            <div className="w-full p-12 rounded-xl bg-neutral-100 flex flex-col justify-center">
+              <h1
+                className={cls(
+                  instrumentSerif.className,
+                  "text-neutral-400 text-4xl text-center tracking-tight",
+                )}
+              >
+                Not Found
+              </h1>
+              <p className="text-neutral-400 text-md font-medium text-center">
+                해당하는 폰트가 없어요 :(
+              </p>
+            </div>
+          )}
+        </div>
+      </InfiniteScroll>
     </div>
   );
 }
