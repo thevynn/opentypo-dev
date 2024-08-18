@@ -109,8 +109,9 @@ const DrawerCheckboxItem = React.forwardRef<
   React.ComponentPropsWithoutRef<"div"> & {
     checked?: boolean;
     onCheckedChange?: (checked: boolean) => void;
+    keepOpenOnSelect?: boolean;  // 추가된 부분
   }
->(({ className, checked, children, onCheckedChange, ...props }, ref) => (
+>(({ className, checked, children, onCheckedChange, keepOpenOnSelect = false, ...props }, ref) => (
   <div
     ref={ref}
     role="checkbox"
@@ -120,9 +121,19 @@ const DrawerCheckboxItem = React.forwardRef<
       "relative flex cursor-default select-none items-center rounded-sm py-2 pl-8 pr-2 text-md outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className,
     )}
-    onClick={() => onCheckedChange?.(!checked)}
+    onClick={(event) => {
+      if (keepOpenOnSelect) {
+        event.preventDefault(); // 기본 동작(닫기)을 방지
+      }
+      onCheckedChange?.(!checked);
+    }}
     onKeyPress={(e) => {
-      if (e.key === "Enter") onCheckedChange?.(!checked);
+      if (e.key === "Enter") {
+        if (keepOpenOnSelect) {
+          e.preventDefault(); // 기본 동작(닫기)을 방지
+        }
+        onCheckedChange?.(!checked);
+      }
     }}
     {...props}
   >
@@ -133,7 +144,6 @@ const DrawerCheckboxItem = React.forwardRef<
   </div>
 ));
 DrawerCheckboxItem.displayName = "DrawerCheckboxItem";
-
 export {
   Drawer,
   DrawerPortal,

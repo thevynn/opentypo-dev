@@ -160,9 +160,11 @@ export default function Admin() {
       setSelectedPersonalities([]);
       setFontFile(null);
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
       toast({
         title: "Failed to add the font",
-        description: error.message || "Please try again.",
+        description: errorMessage || "Please try again.",
       });
     }
   };

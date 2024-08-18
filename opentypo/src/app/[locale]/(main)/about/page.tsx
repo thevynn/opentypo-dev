@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import { Instrument_Serif } from "next/font/google";
 
 const instrumentSerif = Instrument_Serif({
@@ -8,7 +7,7 @@ const instrumentSerif = Instrument_Serif({
   style: ["normal", "italic"],
 });
 
-export const cls = (...classnames: string[]) => {
+const cls = (...classnames: string[]) => {
   return classnames.join(" ");
 };
 

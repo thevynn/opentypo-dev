@@ -28,7 +28,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "../temp/(login)"
   ],
   "exclude": ["node_modules"]
 }

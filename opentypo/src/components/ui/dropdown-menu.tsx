@@ -85,7 +85,7 @@ const DropdownMenuItem = React.forwardRef<
     ref={ref}
     onSelect={(event) => {
       if (keepOpenOnSelect) {
-        event.preventDefault();
+        event.preventDefault(); // 메뉴를 닫지 않도록 설정
       }
     }}
     className={cn(
@@ -112,7 +112,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
       ref={ref}
       onSelect={(event) => {
         if (keepOpenOnSelect) {
-          event.preventDefault();
+          event.preventDefault(); // 메뉴를 닫지 않도록 설정
         }
       }}
       className={cn(
@@ -144,7 +144,7 @@ const DropdownMenuRadioItem = React.forwardRef<
     ref={ref}
     onSelect={(event) => {
       if (keepOpenOnSelect) {
-        event.preventDefault();
+        event.preventDefault(); // 메뉴를 닫지 않도록 설정
       }
     }}
     className={cn(
@@ -157,7 +157,7 @@ const DropdownMenuRadioItem = React.forwardRef<
       <DropdownMenuPrimitive.ItemIndicator>
         <Circle className="h-2 w-2 fill-current" />
       </DropdownMenuPrimitive.ItemIndicator>
-    </span>
+      </span>
     {children}
   </DropdownMenuPrimitive.RadioItem>
 ));
