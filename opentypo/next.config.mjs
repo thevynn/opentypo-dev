@@ -8,7 +8,7 @@ const nextConfig = {
   //   return [
   //     {
   //       source: "/",
-  //       destination: "/main",
+  //       destination: "/notice",
   //       permanent: false,
   //     },
   //   ];

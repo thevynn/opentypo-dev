@@ -3,11 +3,11 @@ import createIntlMiddleware from "next-intl/middleware";
 import { NextRequest } from "next/server";
 
 const locales = ["ko", "en"];
-const publicPages = ["/", "/about", "/admin"];
+const publicPages = ["/", "/about", "/notice", "/login"];
 
 const intlMiddleware = createIntlMiddleware({
   locales,
-  localePrefix: "as-needed",
+  localePrefix: "never", //as-needed
   defaultLocale: "ko",
 });
 
