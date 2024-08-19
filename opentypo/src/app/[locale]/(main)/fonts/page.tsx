@@ -11,7 +11,7 @@ import { FontPreviewSettingBar } from "@/components/FontPreviewSettingBar";
 export default async function Fonts() {
   const supabase = createClient();
   const { data: fonts } = await supabase.from("fonts").select();
-
+ 
   // fonts가 null일 경우를 처리
   if (!fonts) {
     return <div>No fonts found.</div>;
