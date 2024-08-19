@@ -1,10 +1,4 @@
-// TODO: 어뷰징 방지를 위한 방안
-// TODO: Resizeable Textfield 오류 수정
-
 import * as React from "react";
-
-import { cn } from "@/lib/utils";
-import { useSession } from "next-auth/react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,34 +21,56 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { CustomButton } from "@/components/ui/custom-button";
 import { Textarea } from "@/components/ui/textarea";
-
 import { supabase } from "@/lib/supabaseClient";
 import { Laugh, Smile, Meh, Frown, Angry } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import ReCAPTCHA from "react-google-recaptcha";
+import { CustomButton } from "./ui/custom-button";
 
 export function FeedbackDialog() {
   const [open, setOpen] = React.useState(false);
   const [feedback, setFeedback] = React.useState("");
   const [rating, setRating] = React.useState<number | undefined>(undefined);
+  const [captchaVerified, setCaptchaVerified] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const { data: session } = useSession();
   const { toast } = useToast();
+  const [lastSubmitted, setLastSubmitted] = React.useState<number | null>(null);
+
+  const handleCaptchaChange = (value: string | null) => {
+    setCaptchaVerified(Boolean(value)); // CAPTCHA가 성공적으로 완료되었는지 확인
+  };
 
   const handleSubmit = async () => {
-    const feedbackData: { [key: string]: any } = {
+    if (!captchaVerified) {
+      toast({
+        title: "CAPTCHA를 완료해 주세요.",
+        variant: "destructive",
+        description: "제출 전에 CAPTCHA를 완료해 주세요.",
+        duration: 5000,
+      });
+      return;
+    }
+
+    const now = Date.now();
+    const timeSinceLastSubmit = lastSubmitted ? now - lastSubmitted : Infinity;
+    const waitTime = 60000; // 제출 간격: 1분 (60,000ms)
+
+    if (timeSinceLastSubmit < waitTime) {
+      const remainingTime = Math.ceil((waitTime - timeSinceLastSubmit) / 1000);
+      toast({
+        title: "제출 간격이 너무 짧습니다.",
+        variant: "destructive",
+        description: `잠시 후 다시 시도해 주세요. ${remainingTime}초 후에 제출 가능합니다.`,
+        duration: 5000,
+      });
+      return;
+    }
+
+    const feedbackData = {
       feedback,
       rating,
     };
-
-    // if (session) {
-    //   feedbackData.user_id = session.user.id;
-    //   feedbackData.user_name = session.user.name;
-    //   feedbackData.email_address = session.user.email;
-    // }
 
     const { data, error } = await supabase
       .from("feedbacks")
@@ -78,6 +94,8 @@ export function FeedbackDialog() {
       });
       setFeedback(""); // 입력한 내용 초기화
       setRating(undefined); // 평가 점수 초기화
+      setCaptchaVerified(false); // CAPTCHA 초기화
+      setLastSubmitted(now); // 제출 시간 업데이트
       setOpen(false); // 다이얼로그 닫기
     }
   };
@@ -116,6 +134,11 @@ export function FeedbackDialog() {
         placeholder="이런 기능이 있으면 좋겠어요"
         value={feedback}
         onChange={(e) => setFeedback(e.target.value)}
+        maxLength={500} // 피드백 길이 제한
+      />
+      <ReCAPTCHA
+        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string} // 환경 변수에서 사이트 키 가져오기
+        onChange={handleCaptchaChange}
       />
     </>
   );

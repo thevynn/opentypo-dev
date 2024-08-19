@@ -141,6 +141,7 @@ export default function ExploreSection({
                 authors={font.author}
                 fontUrl={font.fontUrl}
                 downloadUrl={font.download_url}
+                comment={font.comment} // comment 필드 추가
               />
             ))
           ) : (

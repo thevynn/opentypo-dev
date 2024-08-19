@@ -21,29 +21,50 @@ export default async function Home() {
       { data: categories, error: categoriesError },
       { data: personalities, error: personalitiesError },
       { data: languages, error: languagesError },
-      { data: fontPersonalities, error: fontPersonalitiesError }
+      { data: fontPersonalities, error: fontPersonalitiesError },
     ] = await Promise.all([
       supabase.from("fonts").select("*"),
       supabase.from("category").select("*"),
       supabase.from("personality").select("*"),
       supabase.from("language").select("*"),
-      supabase.from("font_personality").select("font_id, personality_id")
+      supabase.from("font_personality").select("font_id, personality_id"),
     ]);
 
-    if (fontsError || categoriesError || personalitiesError || languagesError || fontPersonalitiesError) {
-      console.error("Error fetching data:", fontsError || categoriesError || personalitiesError || languagesError || fontPersonalitiesError);
+    if (
+      fontsError ||
+      categoriesError ||
+      personalitiesError ||
+      languagesError ||
+      fontPersonalitiesError
+    ) {
+      console.error(
+        "Error fetching data:",
+        fontsError ||
+          categoriesError ||
+          personalitiesError ||
+          languagesError ||
+          fontPersonalitiesError,
+      );
       throw new Error("Failed to fetch data");
     }
 
-    console.log("Data fetched:", { fonts, categories, personalities, languages, fontPersonalities });
+    console.log("Data fetched:", {
+      fonts,
+      categories,
+      personalities,
+      languages,
+      fontPersonalities,
+    });
 
     // 데이터 가공
-    const fontsWithParsedData = fonts.map(font => {
+    const fontsWithParsedData = fonts.map((font) => {
       console.log(`Processing font: ${font.name}`);
 
       const personalitiesForFont = fontPersonalities
-        .filter(fp => fp.font_id === font.id)
-        .map(fp => personalities.find(p => p.id === fp.personality_id)?.name)
+        .filter((fp) => fp.font_id === font.id)
+        .map(
+          (fp) => personalities.find((p) => p.id === fp.personality_id)?.name,
+        )
         .filter(Boolean);
 
       let parsedAuthors = [];
@@ -51,20 +72,25 @@ export default async function Home() {
         try {
           parsedAuthors = JSON.parse(font.author);
         } catch (error) {
-          console.error(`Error parsing author data for font ${font.name}:`, error);
+          console.error(
+            `Error parsing author data for font ${font.name}:`,
+            error,
+          );
         }
       } else if (Array.isArray(font.author)) {
         parsedAuthors = font.author;
       }
 
-      const languageName = languages.find(lang => lang.id === font.language_id)?.name || "unknown";
+      const languageName =
+        languages.find((lang) => lang.id === font.language_id)?.name ||
+        "unknown";
 
       return {
         ...font,
         author: parsedAuthors,
         fontUrl: `${SUPABASE_URL}/storage/v1/object/public/fonts/${font.font_file_path}`,
         personalities: personalitiesForFont,
-        language: languageName
+        language: languageName,
       };
     });
 
@@ -76,9 +102,13 @@ export default async function Home() {
           <Landing />
           <div className="flex flex-col gap-4">
             <ExploreSection
-              categoryOptions={categories?.map(c => ({ id: c.id, label: c.name })) || []}
-              personalityOptions={personalities?.map(p => ({ label: p.name })) || []}
-              languageOptions={languages?.map(l => ({ label: l.name })) || []}
+              categoryOptions={
+                categories?.map((c) => ({ id: c.id, label: c.name })) || []
+              }
+              personalityOptions={
+                personalities?.map((p) => ({ label: p.name })) || []
+              }
+              languageOptions={languages?.map((l) => ({ label: l.name })) || []}
               fonts={fontsWithParsedData}
             />
           </div>

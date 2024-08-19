@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -12,69 +11,44 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { RotateCcw, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerTrigger,
+  DrawerClose,
+  DrawerFooter,
+  DrawerCheckboxItem,
+} from "@/components/ui/drawer";
 
-type Checked = DropdownMenuCheckboxItemProps["checked"];
-
-type Item = {
-  label: string;
-};
+type Checked = boolean;
 
 type MultiSelectorProps = {
-  items: Item[];
   label: string;
+  items: { label: string }[];
   icon: React.ReactNode;
   onSelectionChange: (selectedItems: string[]) => void;
 };
 
-const TOGGLE_OPTION = "TOGGLE_OPTION";
-const RESET_OPTIONS = "RESET_OPTIONS";
-
-type State = {
-  [key: string]: boolean;
-};
-
-function reducer(
-  state: State,
-  action: { type: string; option?: string; value?: boolean },
-): State {
-  switch (action.type) {
-    case TOGGLE_OPTION:
-      return {
-        ...state,
-        [action.option!]: action.value!,
-      };
-    case RESET_OPTIONS:
-      return Object.keys(state).reduce((acc, key) => {
-        acc[key] = true;
-        return acc;
-      }, {} as State);
-    default:
-      return state;
-  }
-}
-
-
-
 export default function MultiSelector({
-  items,
   label,
+  items,
   icon,
   onSelectionChange,
 }: MultiSelectorProps) {
-  const initialState: State = items.reduce((acc, item) => {
-    acc[`show${item.label}`] = true;
-    return acc;
-  }, {} as State);
+  const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
-  const [state, dispatch] = React.useReducer(reducer, initialState);
-
-  const selectedItems = items
-    .filter((item) => state[`show${item.label}`])
-    .map((item) => item.label);
+  React.useEffect(() => {
+    onSelectionChange(selectedItems);
+  }, [selectedItems, onSelectionChange]);
 
   const selectedItemsText =
-    selectedItems.length === items.length
-      ? "전체"
+    selectedItems.length === 0
+      ? "선택 안 됨"
       : selectedItems.length > 2
         ? `${selectedItems.slice(0, 2).join(", ")}`
         : selectedItems.join(", ");
@@ -82,25 +56,71 @@ export default function MultiSelector({
   const moreItemsCount = selectedItems.length - 2;
 
   const handleReset = () => {
-    dispatch({ type: RESET_OPTIONS });
+    setSelectedItems([]); // 모든 항목 선택 해제
   };
 
-  React.useEffect(() => {
-    const selected = items
-      .filter((item) => state[`show${item.label}`])
-      .map((item) => item.label);
-    onSelectionChange(selected);
-  }, [state, items, onSelectionChange]);
+  const toggleItem = (label: string, checked: boolean) => {
+    setSelectedItems((prev) =>
+      checked ? [...prev, label] : prev.filter((item) => item !== label),
+    );
+  };
 
-  React.useEffect(() => {
-  console.log(`MultiSelector (${label}) - Selected items:`, selectedItems);
-  const selected = items
-    .filter((item) => state[`show${item.label}`])
-    .map((item) => item.label);
-  console.log(`MultiSelector (${label}) - Emitting selection:`, selected);
-  onSelectionChange(selected);
-}, [state, items, onSelectionChange, label]);
-  
+  if (isMobile) {
+    return (
+      <Drawer>
+        <DrawerTrigger asChild>
+          <Button variant="secondary" className="flex items-center space-x-1">
+            {icon}
+            <p className="font-semibold text-neutral-900">{label}</p>
+            <p className="font-medium text-neutral-700">
+              {selectedItemsText}
+              {moreItemsCount > 0 && selectedItems.length !== items.length && (
+                <span className="text-neutral-500">
+                  {" +"}
+                  {moreItemsCount}
+                  {" more"}
+                </span>
+              )}
+            </p>
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>{label} 선택</DrawerTitle>
+            <DrawerDescription>필요한 항목을 선택하세요</DrawerDescription>
+          </DrawerHeader>
+          <div className="max-h-60 overflow-y-auto">
+            {items.map((item) => (
+              <DrawerCheckboxItem
+                key={item.label}
+                checked={selectedItems.includes(item.label)}
+                onCheckedChange={(checked) => toggleItem(item.label, checked)}
+              >
+                {item.label}
+              </DrawerCheckboxItem>
+            ))}
+          </div>
+          <DrawerFooter className="pt-2 flex-row h-16">
+            <Button
+              onClick={handleReset}
+              variant="outline"
+              size="sm"
+              className="w-48 h-full"
+            >
+              <RotateCcw className="mr-2 h-4 w-4" />
+              초기화
+            </Button>
+            <DrawerClose className="h-full w-full" asChild>
+              <Button variant="default" className="w-full">
+                확인
+              </Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
 
   return (
     <DropdownMenu>
@@ -108,10 +128,10 @@ export default function MultiSelector({
         <Button variant="secondary" className="flex items-center space-x-1">
           {icon}
           <p className="font-semibold text-neutral-900">{label}</p>
-          <p className="font-semibold text-neutral-500">
+          <p className="font-medium text-neutral-700">
             {selectedItemsText}
             {moreItemsCount > 0 && selectedItems.length !== items.length && (
-              <span className="text-neutral-400">
+              <span className="text-neutral-500">
                 {" +"}
                 {moreItemsCount}
                 {" more"}
@@ -124,22 +144,18 @@ export default function MultiSelector({
       <DropdownMenuContent className="w-56" align="start">
         <DropdownMenuLabel>{label} 선택</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {items.map((item) => (
-          <DropdownMenuCheckboxItem
-            key={item.label}
-            checked={state[`show${item.label}`]}
-            keepOpenOnSelect={true}
-            onCheckedChange={(checked) =>
-              dispatch({
-                type: TOGGLE_OPTION,
-                option: `show${item.label}`,
-                value: checked,
-              })
-            }
-          >
-            {item.label}
-          </DropdownMenuCheckboxItem>
-        ))}
+        <div className="max-h-60 overflow-y-auto">
+          {items.map((item) => (
+            <DropdownMenuCheckboxItem
+              key={item.label}
+              checked={selectedItems.includes(item.label)}
+              keepOpenOnSelect={true}
+              onCheckedChange={(checked) => toggleItem(item.label, checked)}
+            >
+              {item.label}
+            </DropdownMenuCheckboxItem>
+          ))}
+        </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem keepOpenOnSelect={true}>
           <Button
