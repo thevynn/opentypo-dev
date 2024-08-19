@@ -15,15 +15,13 @@ import AppleLogo from "@public/images/appleLogo.svg";
 
 import { Instrument_Serif } from "next/font/google";
 
+import { cls } from "@/utils/cls";
+
 const instrumentSerif = Instrument_Serif({
   weight: "400",
   subsets: ["latin"],
   style: ["normal", "italic"],
 });
-
-export const cls = (...classnames: string[]) => {
-  return classnames.join(" ");
-};
 
 export default function Login() {
   return (

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 
+import { Analytics } from "@vercel/analytics/react";
+
 import localFont from "next/font/local";
 import SessionWrapper from "@/components/SessionWrapper";
 import { NextIntlClientProvider } from "next-intl";
