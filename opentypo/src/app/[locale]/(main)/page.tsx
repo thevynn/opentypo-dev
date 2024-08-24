@@ -97,10 +97,10 @@ export default async function Home() {
     console.log("Fonts with parsed data:", fontsWithParsedData);
 
     return (
-      <main className="w-screen flex justify-center lg:px-12 pb-16 px-4">
+      <main className="w-screen flex justify-center md:px-12 pb-16 px-4">
         <div className="w-full max-w-screen-xl">
           <Landing />
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 items-center">
             <ExploreSection
               categoryOptions={
                 categories?.map((c) => ({ id: c.id, label: c.name })) || []

@@ -15,7 +15,7 @@ export const cls = (...classnames: string[]) => {
 
 export default function Landing() {
   return (
-    <div className="px-2 py-16  flex flex-col gap-6 items-center">
+    <div className="md:px-2 py-16  flex flex-col gap-6 items-center">
       <div className="w-full flex flex-col gap-2">
         {/* Hero Effector */}
         <svg width="0" height="0">
@@ -42,7 +42,7 @@ export default function Landing() {
         <h1
           className={cls(
             instrumentSerif.className,
-            "text-7xl lg:text-9xl text-center tracking-tight",
+            "text-7xl md:text-9xl text-center tracking-tight",
           )}
           style={{ filter: "url(#turbulence)" }}
         >
@@ -56,7 +56,7 @@ export default function Landing() {
         </h3>
       </div>
       <ShimmerButton className="shadow-2xl">
-        <span className="flex flex-row justify-center items-center whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-md">
+        <span className="flex flex-row justify-center items-center whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 md:text-md">
           폰트 찾아보기 <ChevronRight className="w-5 h-5" />
         </span>
       </ShimmerButton>

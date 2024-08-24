@@ -43,7 +43,7 @@ const DrawerContent = React.forwardRef<
     <DrawerPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background",
+        "fixed pb-8 inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background",
         className,
       )}
       {...props}
@@ -109,40 +109,52 @@ const DrawerCheckboxItem = React.forwardRef<
   React.ComponentPropsWithoutRef<"div"> & {
     checked?: boolean;
     onCheckedChange?: (checked: boolean) => void;
-    keepOpenOnSelect?: boolean;  // 추가된 부분
+    keepOpenOnSelect?: boolean; // 추가된 부분
   }
->(({ className, checked, children, onCheckedChange, keepOpenOnSelect = false, ...props }, ref) => (
-  <div
-    ref={ref}
-    role="checkbox"
-    aria-checked={checked}
-    tabIndex={0}
-    className={cn(
-      "relative flex cursor-default select-none items-center rounded-sm py-2 pl-8 pr-2 text-md outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+>(
+  (
+    {
       className,
-    )}
-    onClick={(event) => {
-      if (keepOpenOnSelect) {
-        event.preventDefault(); // 기본 동작(닫기)을 방지
-      }
-      onCheckedChange?.(!checked);
-    }}
-    onKeyPress={(e) => {
-      if (e.key === "Enter") {
+      checked,
+      children,
+      onCheckedChange,
+      keepOpenOnSelect = false,
+      ...props
+    },
+    ref,
+  ) => (
+    <div
+      ref={ref}
+      role="checkbox"
+      aria-checked={checked}
+      tabIndex={0}
+      className={cn(
+        "relative flex cursor-default select-none items-center rounded-sm py-2 pl-8 pr-2 text-md outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        className,
+      )}
+      onClick={(event) => {
         if (keepOpenOnSelect) {
-          e.preventDefault(); // 기본 동작(닫기)을 방지
+          event.preventDefault(); // 기본 동작(닫기)을 방지
         }
         onCheckedChange?.(!checked);
-      }
-    }}
-    {...props}
-  >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-      {checked && <Check className="h-4 w-4" />}
-    </span>
-    {children}
-  </div>
-));
+      }}
+      onKeyPress={(e) => {
+        if (e.key === "Enter") {
+          if (keepOpenOnSelect) {
+            e.preventDefault(); // 기본 동작(닫기)을 방지
+          }
+          onCheckedChange?.(!checked);
+        }
+      }}
+      {...props}
+    >
+      <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+        {checked && <Check className="h-4 w-4" />}
+      </span>
+      {children}
+    </div>
+  ),
+);
 DrawerCheckboxItem.displayName = "DrawerCheckboxItem";
 export {
   Drawer,

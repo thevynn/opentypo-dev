@@ -5,6 +5,7 @@ import MultiSelector from "./MultiSelector";
 import FontSearchBar from "@/components/FontSearchBar";
 import FontPreviewCard from "@/components/FontPreviewCard";
 import InfiniteScroll from "react-infinite-scroll-component";
+
 import { Instrument_Serif } from "next/font/google";
 
 const instrumentSerif = Instrument_Serif({
@@ -45,7 +46,10 @@ export default function ExploreSection({
   const [hasMore, setHasMore] = React.useState(filteredFonts.length > 10);
 
   React.useEffect(() => {
-    const newFilteredFonts = fonts.filter((font) => {
+    // 폰트를 id 기준으로 정렬
+    const sortedFonts = fonts.sort((a, b) => a.id - b.id);
+
+    const newFilteredFonts = sortedFonts.filter((font) => {
       const matchesLanguage =
         selectedLanguages.length === 0 ||
         selectedLanguages.includes(font.language);
@@ -99,8 +103,8 @@ export default function ExploreSection({
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full">
-      <div className="flex flex-col lg:flex-row gap-4 w-full">
+    <div className="flex flex-col gap-4 w-full md:max-w-screen-lg">
+      <div className="flex flex-col md:flex-row gap-2 md:gap-4 w-full">
         <MultiSelector
           items={languageOptions}
           label="언어"

@@ -22,7 +22,8 @@ export default function Admin() {
     category_id: "",
     language_id: "",
     license: "",
-    download_url: "", // download_url 필드 추가
+    download_url: "",
+    comment: "", // comment 필드 추가
   });
 
   const [selectedPersonalities, setSelectedPersonalities] = useState<
@@ -109,9 +110,18 @@ export default function Admin() {
       return;
     }
 
+    // 빈 문자열을 null로 변환
+    const formDataToSubmit = {
+      ...formData,
+      category_id: formData.category_id || null,
+      language_id: formData.language_id || null,
+    };
+
     try {
       // 폰트명 가공하여 경로 생성
-      const formattedName = formData.name.toLowerCase().replace(/ /g, "_");
+      const formattedName = formDataToSubmit.name
+        .toLowerCase()
+        .replace(/ /g, "_");
       const filePath = `${formattedName}/${fontFile.name}`;
 
       // 폰트 파일을 Supabase Storage에 업로드
@@ -126,7 +136,7 @@ export default function Admin() {
       // 폰트 정보를 데이터베이스에 저장
       const { data, error: fontInsertError } = await supabaseClient
         .from("fonts")
-        .insert([{ ...formData, font_file_path: filePath }])
+        .insert([{ ...formDataToSubmit, font_file_path: filePath }])
         .select();
 
       if (fontInsertError || !data || data.length === 0) {
@@ -155,7 +165,8 @@ export default function Admin() {
         category_id: "",
         language_id: "",
         license: "",
-        download_url: "", // download_url 초기화
+        download_url: "",
+        comment: "",
       });
       setSelectedPersonalities([]);
       setFontFile(null);
@@ -289,6 +300,18 @@ export default function Admin() {
             id="download_url"
             name="download_url"
             value={formData.download_url}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="comment">Comment</Label>
+          <Input
+            type="text"
+            id="comment"
+            name="comment"
+            value={formData.comment}
             onChange={handleChange}
             required
           />

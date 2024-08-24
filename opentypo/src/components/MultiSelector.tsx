@@ -69,7 +69,10 @@ export default function MultiSelector({
     return (
       <Drawer>
         <DrawerTrigger asChild>
-          <Button variant="secondary" className="flex items-center space-x-1">
+          <Button
+            variant="secondary"
+            className="flex items-center space-x-1 h-12"
+          >
             {icon}
             <p className="font-semibold text-neutral-900">{label}</p>
             <p className="font-medium text-neutral-700">
@@ -87,7 +90,7 @@ export default function MultiSelector({
         </DrawerTrigger>
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle>{label} 선택</DrawerTitle>
+            <DrawerTitle className="text-xl">{label} 선택</DrawerTitle>
             <DrawerDescription>필요한 항목을 선택하세요</DrawerDescription>
           </DrawerHeader>
           <div className="max-h-60 overflow-y-auto">
@@ -96,24 +99,27 @@ export default function MultiSelector({
                 key={item.label}
                 checked={selectedItems.includes(item.label)}
                 onCheckedChange={(checked) => toggleItem(item.label, checked)}
+                className="py-4"
               >
                 {item.label}
               </DrawerCheckboxItem>
             ))}
           </div>
-          <DrawerFooter className="pt-2 flex-row h-16">
+          <DrawerFooter className="pt-4 border-t flex-row">
             <Button
               onClick={handleReset}
               variant="outline"
-              size="sm"
-              className="w-48 h-full"
+              className="w-48 h-12 text-md font-medium gap-1"
             >
-              <RotateCcw className="mr-2 h-4 w-4" />
+              <RotateCcw className="h-5 w-5" />
               초기화
             </Button>
             <DrawerClose className="h-full w-full" asChild>
-              <Button variant="default" className="w-full">
-                확인
+              <Button
+                variant="default"
+                className="w-full h-12 font-semibold text-md"
+              >
+                적용
               </Button>
             </DrawerClose>
           </DrawerFooter>

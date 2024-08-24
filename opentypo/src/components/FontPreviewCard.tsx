@@ -95,10 +95,10 @@ export default function FontPreviewCard({
         />
         <p className="text-sm text-neutral-600">Designed by {authorElements}</p>
       </CardContent>
-      <CardFooter className="bg-white py-3 flex flex-row justify-between">
-        <div className="flex flex-row gap-3">
-          <div className="text-sm font-medium text-neutral-500">
-            에디터 한 줄 평
+      <CardFooter className="bg-white py-3 flex flex-col md:flex-row gap-4 justify-between">
+        <div className="flex flex-row gap-3 w-full">
+          <div className="flex-none text-sm font-medium text-neutral-500">
+            코멘터리
           </div>
           <div className="text-sm font-regular">{comment}</div>
         </div>
@@ -110,10 +110,10 @@ export default function FontPreviewCard({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Download font ${name}`}
-                className="flex items-center rounded-full text-sm font-semibold text-neutral-800 border pl-3 pr-4 py-2 hover:bg-gray-50"
+                className="flex-none w-full md:w-fit pl-4 md:pl-3 pr-8 md:pr-4 py-3 md:py-2 flex items-center justify-center rounded-full font-semibold text-neutral-800 border  hover:bg-gray-50"
               >
                 <CloudDownload className="h-4 w-4 mr-2" />
-                다운로드
+                <p className="text-md md:text-sm">다운로드</p>
               </Link>
             </TooltipTrigger>
             <TooltipContent>
